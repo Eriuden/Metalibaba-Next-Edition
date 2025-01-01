@@ -19,13 +19,16 @@ export const Header = async() => {
             <form action={async() => {
               "use server"
               await signIn()}
-            }><span>Connexion</span></form>           
+            }><button type='submit'>Connexion</button></form>           
         </li>
         ):
         (
           <li>
-            <form action={signOut()}><span>Déconnexion</span></form>
-            
+            <form action={async() => {
+              "use server"
+              await signOut()
+            }}><button type='submit'></button></form>
+
             <Link href={`/user/${session.id}`}>
             <span>{session?.user?.name}</span>
             </Link>            
@@ -49,11 +52,11 @@ export const Header = async() => {
                   <form action={async() => {
                     "use server"
                     await signIn()}
-                  }><span>Connexion</span></form>           
+                  }><button type='submit'>Connexion</button></form>           
               </li>
             ): (
               <li>                
-                  <form action={signOut()}><span>Déconnexion</span></form>
+                  <form action={signOut()}><button type='submit'></button></form>
 
                   <Link href={`/user/${session.id}`}>
                     <span>{session?.user?.name}</span>
