@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import useSession from "next-auth"
-import SignIn from "next-auth"
-import SignOut from "next-auth"
 import { Squash as Hamburger } from 'hamburger-react'
+import { auth, signOut, signIn } from '@/auth'
 
-export const Header = () => {
-    const [session, loading] = useSession()
-    const [hamburger, setHamburger] = useState(second)
+export const Header = async() => {
+    const session = await auth()
+    const [hamburger, setHamburger] = useState(false)
   return (
     <div className='bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 bg-cover'>
       <h1 className='text-gray-400 font-serif text-center'>
@@ -16,29 +14,23 @@ export const Header = () => {
       <nav className='hidden sticky flex-row justify-around mt-2 sm:flex'>
         <Link href={"/"} className ="text-gray-100 font-serif text-xl">Accueil</Link>
 
-        {!loading && !session && (
-          <li>
-          <Link href="/api/auth/signin">
-            <a onClick={e => {
-              e.preventDefault()
-              SignIn()
-            }}>Connexion</a>
-          </Link>
+        { !session && !session?.user ? (
+          <li>         
+            <form action={async() => {
+              "use server"
+              await signIn()}
+            }><span>Connexion</span></form>           
         </li>
-        )}
-      
-        {session && (
+        ):
+        (
           <li>
-            <Link href="/api/auth/signout">
-              <a onClick={e => {
-                e.preventDefault()
-                SignOut()
-              }}>Déconnexion</a>
-            </Link>
+            <form action={signOut()}><span>Déconnexion</span></form>
+            
+            <Link href={`/user/${session.id}`}>
+            <span>{session?.user?.name}</span>
+            </Link>            
           </li>
-        )}
-
-        
+        )}       
       </nav>
 
       <h2 className='flex m-3 sm:hidden sticky text-white' onClick={()=> setHamburger(!hamburger)}>
@@ -52,27 +44,22 @@ export const Header = () => {
         bg-gradient-to-r from-slate-200 via-slate-300 to-slate-400'>
             <Link href={"/"} className ="text-gray-100 font-serif text-xl">Accueil</Link>
 
-            {!loading && !session && (
-            <li>
-            <Link href="/api/auth/signin">
-                <a onClick={e => {
-                e.preventDefault()
-                SignIn()
-                }}>Connexion</a>
-            </Link>
-            </li>
-            )}
+            {!session && session?.user ? (
+              <li>
+                  <form action={async() => {
+                    "use server"
+                    await signIn()}
+                  }><span>Connexion</span></form>           
+              </li>
+            ): (
+              <li>                
+                  <form action={signOut()}><span>Déconnexion</span></form>
 
-            {session && (
-            <li>
-                <Link href="/api/auth/signout">
-                <a onClick={e => {
-                    e.preventDefault()
-                    SignOut()
-                }}>Déconnexion</a>
-                </Link>
-            </li>
-            )}
+                  <Link href={`/user/${session.id}`}>
+                    <span>{session?.user?.name}</span>
+                  </Link>               
+              </li>
+              )}             
         </nav>
       ):""}
     </div>
