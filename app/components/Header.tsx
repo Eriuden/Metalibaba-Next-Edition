@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { Squash as Hamburger } from 'hamburger-react'
 import { auth, signOut, signIn } from '@/auth'
+import { SearchForm } from './SearchForm'
 
 export const Header = async() => {
     const session = await auth()
@@ -65,6 +66,7 @@ export const Header = async() => {
               )}             
         </nav>
       ):""}
+      <SearchForm/>
     </div>
   )
 }
