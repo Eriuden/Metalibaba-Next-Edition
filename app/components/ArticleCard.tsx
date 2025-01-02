@@ -1,4 +1,13 @@
-export const ArticleCard = ({article} : {article: articleCardType}) => {
+type ArticleCardType = {
+    _id: string,
+    img: string,
+    name: string,
+    typeArticle: string,
+    groupe: string,
+    price: number
+}
+
+export const ArticleCard = ({article} : {article: ArticleCardType}) => {
   const {img, name, typeArticle, groupe, price} = article
   return (
     <li>
