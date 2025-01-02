@@ -1,13 +1,9 @@
 import React from 'react'
 import Form from "next/form"
+import { SearchFormReset } from './SearchFormReset'
 
-export const SearchForm = () => {
-  const query=""
-  const reset = () => {
-    document.querySelector(".search-form") as HTMLFormElement
-
-    if(form) form.reset()
-  }
+export const SearchForm = (query: {query?: string}) => {
+  
   return (
     <Form action="/" scroll={false} className="search-form">
         <input 
@@ -17,9 +13,8 @@ export const SearchForm = () => {
         />
 
         <div className='flex gap-2'>
-            {query && (
-                <button type='reset' onClick={reset}></button>
-            )} :""
+            {query && <SearchFormReset/>}
+            <button type='submit'>Vider le cache</button>
         </div>
     </Form>
   )

@@ -66,7 +66,6 @@ export const Header = async() => {
               )}             
         </nav>
       ):""}
-      <SearchForm/>
     </div>
   )
 }
