@@ -1,6 +1,7 @@
 import { SearchForm } from "../components/SearchForm"
 
-export default async function Home(searchParams: any) {
+export default async function Home({searchParams}: 
+  {searchParams: Promise<{query?: string}> }) {
   const query = (await searchParams).query
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
