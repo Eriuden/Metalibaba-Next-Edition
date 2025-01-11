@@ -3,10 +3,18 @@ import Link from 'next/link'
 import { Squash as Hamburger } from 'hamburger-react'
 import { auth, signOut, signIn } from '@/auth'
 import { SearchForm } from './SearchForm'
+import * as ReactModal from "react-modal"
+import { RegisterModal } from './registerModal'
 
 export const Header = async() => {
     const session = await auth()
     const [hamburger, setHamburger] = useState(false)
+    const [inscriptionModal, setInscriptionModal] = useState(false)
+    
+    const switchInscription = () => {
+      setInscriptionModal(!inscriptionModal) 
+    }
+
   return (
     <div className='bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 bg-cover'>
       <h1 className='text-gray-400 font-serif text-center'>
@@ -20,20 +28,35 @@ export const Header = async() => {
             <form action={async() => {
               "use server"
               await signIn()}
-            }><button type='submit'>Connexion</button></form>           
-        </li>
+            }><button type='submit'>Connexion</button></form> 
+            <span onClick={switchInscription}>S'inscrire</span>          
+          </li>
         ):
         (
-          <li>
-            <form action={async() => {
-              "use server"
-              await signOut()
-            }}><button type='submit'></button></form>
+          <>
+            <li>
+              <form action={async() => {
+                "use server"
+                await signOut()
+              }}><button type='submit'></button></form>
 
-            <Link href={`/user/${session.id}`}>
-            <span>{session?.user?.name}</span>
-            </Link>            
-          </li>
+              <Link href={`/user/${session.id}`}>
+              <span>{session?.user?.name}</span>
+              </Link>            
+            </li>
+
+            {inscriptionModal ? (
+              <ReactModal ariaHideApp={false} className= "max-w-[100%] p-2"
+              shouldCloseOnOverlayClick={true}
+              shouldCloseOnEsc={true} isOpen={inscriptionModal ? true : false}>
+                <span className='bg-slate-50 py-2 px-4 mx-[75%] mt-[20%] rounded-md cursor-pointer'
+                onClick={switchInscription}>
+                  X
+                </span>
+                <RegisterModal/>
+              </ReactModal>
+            ) : ""}          
+          </>
         )}       
       </nav>
 
